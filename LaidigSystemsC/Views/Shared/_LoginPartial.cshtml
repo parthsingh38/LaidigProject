@@ -1,0 +1,49 @@
+﻿@using LaidigSystemsC.Models
+
+
+
+
+
+@{
+    ViewBag.Title = "_LoginPartial";
+}
+
+
+
+
+@*@if(Session["UserId"] !=null)
+    {
+        <h4 class="nav navbar-nav navbar-right" style="margin-top:15px;">Hello @Session["UserName"].ToString()</h4>
+
+    }
+ else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}*@
+
+
+
+@if(Session["UserId"] != null)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li id="userprofile" class="button" >
+                @Html.ActionLink("Hello " + @Session["UserName"].ToString() + " !", "", "", routeValues: null, htmlAttributes: new { title = "Account", })
+            </li>
+            <li id="userlogout" class="button" ><a href="javascript:document.getElementById('logoutForm').submit()" >Logout</a></li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}

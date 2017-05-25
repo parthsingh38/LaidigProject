@@ -1,0 +1,3 @@
+﻿1>------ Build started: Project: LaidigSystemsC, Configuration: Debug Any CPU ------
+1>  LaidigSystemsC -> C:\Users\abhishek.kumar2\Documents\Visual Studio 2015\Projects\LaidigSystemsC\LaidigSystemsC\bin\LaidigSystemsC.dll
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========

@@ -1,0 +1,2221 @@
+﻿@*@model LaidigSystemsC.ViewModel.ChartViewModelDropDown*@
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+@*<script src="http://cdn.amcharts.com/lib/3/amcharts.js" type="text/javascript"></script>
+    <script src="http://cdn.amcharts.com/lib/3/serial.js" type="text/javascript"></script>*@
+
+<script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+<script src="https://www.amcharts.com/lib/3/serial.js"></script>
+<script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+<script src="https://www.amcharts.com/lib/3/plugins/export/export.js"></script>
+<script src="http://www.amcharts.com/lib/3/xy.js"></script>
+
+<link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+<script src="~/Scripts/bootstrap-multiselect.js"></script>
+
+<!-- Include Date Range Picker -->
+<script src="~/Theme/js/moment.min.js"></script>
+<script src="~/Theme/js/daterangepicker.js"></script>
+<link href="~/Theme/css/daterangepicker.css" rel="stylesheet" />
+<style>
+    /*.filechart a {
+        background-color: #153c5d;
+    }*/
+    .btn-primary {
+      
+        background-color: #bb7448 !important;
+      
+    }
+    .multiselect-selected-text {
+        white-space: normal;
+    }
+
+    .dropdown-menu {
+        width: 100% !important;
+        
+    }
+   
+</style>
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type='text/javascript' src='https://www.gstatic.com/charts/loader.js'></script>
+<link href="~/Content/Site.css" rel="stylesheet" />
+<div class="box rounds first" style="background-color:#191919;">
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+                </div>
+                <div class="modal-body">
+                    <p id="vikash"> </p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-lg-2" style="margin: 0px;padding: 0px; margin-top:-11px;">
+            <div class="left-panel" style="background-color: #191919; padding:20px 5px;">
+
+                <table class="table table-responsive table-text">
+                    <tr>
+                        <td>
+                            Selected Job <br />
+                            <div id="Job">
+                                @Html.DropDownList("JobNo", (IEnumerable<SelectListItem>)ViewBag.var1, new { id = "ddlJobNo",  @class = "form-control",  @onchange = "FillMachine()" })
+                            </div>
+
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            Selected Machine <br />
+                            <div id="Model">
+                                <select id="ddlMachine" class="multiselect dropdown-toggle btn btn-default" name="ddlMachine" style="width: 200px;background-color:white;color:black" onclick="FillMachineSerialNo()"></select>
+                            </div>
+                           
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Machine S/N <br />
+
+                            <div id="SN">
+
+
+                                <select id="ddlMachineSerialNo" class="multiselect dropdown-toggle btn btn-default" name="ddlMachineSerialNo" style="width: 200px;background-color:white;color:black" multiple="multiple" onchange="FillDiameter()"></select>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Diameter <br />
+                            <select id="ddlDmeter" class = "multiselect dropdown-toggle btn btn-default"  name="ddlDmeter" style="width: 100%;background-color:white;color:black" onclick="FillMaterial()"></select>
+                           
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Material <br />
+                            <select id="ddlMachineMaterial" class="multiselect dropdown-toggle btn btn-default" name="ddlMachineMaterial" style="width: 100%; background-color: white; color: black" onchange="GetAvailableDateForJob()"></select>
+                          
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            System Columns Y Axis <br />
+                            <div id="sysColumn" >
+                                @Html.DropDownList("sysCol", (IEnumerable<SelectListItem>)ViewBag.var6, new { id = "ddlSystemColumns", multiple = "multiple", @class = "form-control" })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            System Columns X Axis <br />
+                            <div id="sysColumnx" >
+                                @Html.DropDownList("sysColx", (IEnumerable<SelectListItem>)ViewBag.var7, new { id = "ddlSystemColumnsx", @class = "form-control" })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Start Date Time <br />
+
+                            @Html.TextBox("txtValue", null, new { id = "startdate", placeholder = "mm/dd/yyyy HH:mm:ss", @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            End Date Time <br />
+                            @Html.TextBox("txtValue", null, new { id = "enddate", placeholder = "mm/dd/yyyy HH:mm:ss", @class = "form-control" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+
+                            Selected Events <br />
+                            <div id="Events" >
+                                @Html.DropDownList("eventslog", (IEnumerable<SelectListItem>)ViewBag.var8, new { id = "ddlEventsno", multiple = "multiple", @class = "form-control" })
+                            </div>
+
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="button" id="Submit1" class="btn btn-primary form-control" value="Display Charts" /><br />
+                   
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <input type="button" id="SubmitEvents" class="btn btn-primary form-control" value="Display Events" /><br />
+                    
+                        </td>
+                    </tr>
+
+
+
+
+                </table>
+
+            </div>
+        </div>
+        <div>
+
+
+        </div>
+        <div class="col-lg-10">
+            <div id="curtain" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+    top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+    opacity: .8; filter: alpha(opacity=70);display:none">
+                <p class="uploadloader">
+
+                    <img src="~/Images/ajax-loader.gif" />
+                    <br />
+                    Loading, please wait...
+                </p>
+            </div>
+            <div id="chartdiv" style="width: 100%; height: 800px; "></div>
+
+        </div>
+
+    </div>
+
+</div>
+<footer style="text-align:center"></footer>
+<script>
+    var valid = false;
+    $('#Submit1').click(function () {
+        var ddlDmeter_validate = $('#ddlDmeter').val();
+        var ddlMachineMaterial_validate = $('#ddlMachineMaterial').val();
+        var mod1_validate = $('#ddlMachine').val();
+        if (ddlDmeter_validate == null && ddlMachineMaterial_validate == null && mod1_validate == null) {
+            valid = false;
+        } else {
+            valid = true;
+        }
+    });
+    $('#SubmitEvents').click(function () {
+        var ddlDmeter_validate = $('#ddlDmeter').val();
+        var ddlMachineMaterial_validate = $('#ddlMachineMaterial').val();
+        var mod1_validate = $('#ddlMachine').val();
+        if (ddlDmeter_validate == null && ddlMachineMaterial_validate == null && mod1_validate == null) {
+            valid = false;
+        } else {
+            valid = true;
+        }
+    });
+    $(document).ready(function () {
+
+
+        var todayDate = new Date(new Date().setHours(0, 0, 0, 0));
+        var enddate = new Date(new Date().setHours(23, 59, 59, 0));
+        var hour = todayDate.getHours();
+        var min = todayDate.getMinutes();
+        var ss = todayDate.getSeconds();
+        var hourend = enddate.getHours();
+        var minend = enddate.getMinutes();
+        var ssend = enddate.getSeconds();
+        var stDate = todayDate.getMonth() + 1 + "/" + todayDate.getDate() + "/" + todayDate.getFullYear() + " " + hour + ":" + min + ":" + ss;
+        var enDate = enddate.getMonth() + 1 + "/" + todayDate.getDate() + "/" + todayDate.getFullYear() + " " + hourend + ":" + minend + ":" + ssend;
+        $('#startdate').val(stDate);
+        $('#enddate').val(enDate);
+
+    });
+    var textToFind = 'DateTime';
+
+    var dd = document.getElementById('ddlSystemColumnsx');
+    for (var i = 0; i < dd.options.length; i++) {
+        if (dd.options[i].text === textToFind) {
+            dd.selectedIndex = i;
+            break;
+        }
+    }
+
+    $(function () {
+
+        $('#ddlMachineSN').multiselect({
+            includeSelectAllOption: true
+        });
+        $('#ddlJobNo').multiselect({
+        });
+        //$('#ddlSelectMachine').multiselect({
+        //});ddlMachineSerialNo
+        //$('#ddlMachineSerialNo').multiselect({
+        //    includeSelectAllOption: true
+        //});
+        $('#ddlSystemColumns').multiselect({
+            includeSelectAllOption: true
+        });
+        $('#ddlDiameter').multiselect({
+            includeSelectAllOption: true
+        });
+        $('#ddlMaterial').multiselect({
+            includeSelectAllOption: true
+        });
+        $('#ddlSystemColumns').multiselect({
+            includeSelectAllOption: false
+        });
+
+        $('#ddlSystemColumnsx').multiselect({
+            includeSelectAllOption: true
+        });
+        $('#ddlEventsno').multiselect({
+            includeSelectAllOption: true
+        });
+        $('#ddlMachineSerialNo').multiselect({
+            includeSelectAllOption: true
+        });
+        //$('#ddlMachineSerialNo]').multiselect({
+        //    includeSelectAllOption: true
+        //});
+    });
+
+
+    $('#Submit1').click(function () {
+        if (valid)
+        {
+            $("#curtain").show();
+            $("#chartdiv").hide();
+        }
+
+
+        var test1;
+        var test2;
+        var SN = [];
+        var job = [];
+        var model1 = [];
+        var diameter = [];
+        var material = [];
+        var sysCol = [];
+        var sysColx = [];
+        var text = [];      
+        if ($('#ddlDmeter').val() && $('#ddlMachineMaterial').val() && $('#ddlMachineSerialNo').val() && $('#ddlMachine').val() && $('#ddlJobNo').val()) {
+
+        }
+        else {
+
+            $("#curtain").hide();
+            $("#vikash").text("Please Check  the filter dropdown");
+            $("#myModal").modal();
+            return false;
+        }
+        var ddlDmeter = $('#ddlDmeter').val().toString();
+        var ddlMachineMaterial = $('#ddlMachineMaterial').val().toString();
+        var mod1 = $('#ddlMachine').val();
+        var mod = mod1.toString();
+        var ddlMachineSerialNo = $('#ddlMachineSerialNo').val().toString();
+        var datestringstart = $('#startdate').val();
+        var datestringEnd = $('#enddate').val();
+        var startDate = [];
+        var endDate = [];
+        if (datestringstart != null && datestringEnd) {
+            startDate = datestringstart.split(' ');
+            endDate = datestringEnd.split(' ');
+            var datesplit = [];
+            var timesplit = [];
+            datesplit = startDate[0].toString().split('/');
+            timesplit = startDate[1].toString().split(':');
+            var yyyy = parseInt(datesplit[2]);
+            var mm = parseInt(datesplit[0]);
+            var dd = parseInt(datesplit[1]);
+
+            var starthh = parseInt(timesplit[0]);
+            var startmm = parseInt(timesplit[1]);
+            var startss = parseInt(timesplit[2]);
+
+            var datesplitend = [];
+            var timesplitend = [];
+            datesplitend = endDate[0].toString().split('/');
+            timesplitend = endDate[1].toString().split(':');
+            var yyyyend = parseInt(datesplitend[2]);
+            var mmend = parseInt(datesplitend[0]);
+            var ddend = parseInt(datesplitend[1]);
+            var hhend = parseInt(timesplitend[0]);
+            var minend = parseInt(timesplitend[1]);
+            var ssend = parseInt(timesplitend[2]);
+        }
+
+        $('#SN input:checked').each(function () {
+            SN.push($(this).attr('value'));
+        });
+        $('#Job input:checked').each(function () {
+            job.push($(this).attr('value'));
+        });
+        $('#Model input:checked').each(function () {
+            model1.push($(this).attr('value'));
+        });
+        $('#sysColumn input:checked').each(function () {
+            sysCol.push($(this).attr('value'));
+            text.push($(this).attr('text'));
+        });
+        $('#sysColumnx input:checked').each(function () {
+            sysColx.push($(this).attr('value'));
+        });
+
+        var textmapping = "";
+        $("#ddlSystemColumns option:selected").each(function () {
+            textmapping += $(this).text() + ",";
+        });
+        var str = textmapping.replace(/,\s*$/, "");
+        var y = [];
+        y = str.split(',');
+        var syscolumn = sysCol.toString();
+        syscolumn = syscolumn.replace('multiselect-all,', '');
+        var syscolumnx = sysColx.toString();
+        var SN = $('#ddlMachineSerialNo').val();
+        var diametre = $('#ddlDmeter').val();
+        var material = $('#ddlMachineMaterial').val();
+
+        var sn = SN.toString();
+        var serialno = sn.replace('multiselect-all,', ''); 
+        var job = job.toString();
+        job = job.replace('multiselect-all,', '');
+        var columnY = [];
+        var axisX = sysColx.toString();
+        var diam = diameter.toString();
+        var mater = material.toString();
+        columnY = syscolumn.split(',');
+        var count = $("#ddlSystemColumns :selected").length;
+
+        var jsonData = $.ajax({
+
+            url: "DataTableToJSONWithJavaScriptSerializer/ChartController",
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            data: { 'machine': sn, 'mod': mod, 'job': job, 'startdate': datestringstart, 'enddate': datestringEnd, 'syscolumn': syscolumn, 'axisX': axisX, 'diameter': diametre, 'material': material },
+            success: function (data) {
+                valid = true;
+
+            },
+            error: function (xhr, status) {
+                valid = false;
+                $("#curtain").hide();
+                $("#chartdiv").hide();
+                $("#vikash").text("No Data Found !!!");
+                $("#myModal").modal();
+                //alert('No Data Found ');
+
+            }
+        }).responseText;
+
+        var strinarray = eval(jsonData);
+        if (axisX === 'logdatetime') {
+            var chartData = generateChartData();
+            var disPlayParams = columnY;
+            var chart = AmCharts.makeChart("chartdiv", {
+                "type": "serial",
+                "theme": "light",
+                "marginRight": 0,
+                "dataProvider": chartData,
+                "legend": {
+                    "useGraphSettings": true,
+                    "color": "#2a5b67",
+                    "fontSize": 15,
+                },
+                "valueAxes": [{
+                    "id": disPlayParams[0],
+                    "axisColor": "#FF6600",
+                    "axisThickness": 2,
+                    "axisAlpha": 1,
+                    "position": "left",
+                    "color": "#2a5b67"
+                }, {
+                    "id": disPlayParams[1],
+                    "axisColor": "#FCD202",
+                    "axisThickness": 2,
+                    "axisAlpha": 1,
+                    "position": "right",
+                    "color": "#2a5b67"
+                }, {
+                    "id": disPlayParams[2],
+                    "axisColor": "#B0DE09",
+                    "axisThickness": 2,
+                    "gridAlpha": 0,
+                    "offset": 50,
+                    "axisAlpha": 1,
+                    "position": "left",
+                    "color": "#2a5b67"
+                }, {
+                    "id": disPlayParams[3],
+                    "axisColor": "#00FFFF",
+                    "axisThickness": 2,
+                    "gridAlpha": 0,
+                    "offset": 50,
+                    "axisAlpha": 1,
+                    "position": "right",
+                    "color": "#2a5b67"
+                },
+                {
+                    "id": disPlayParams[4],
+                    "axisColor": "#7e906e",
+                    "axisThickness": 2,
+                    "gridAlpha": 0,
+                    "offset": 100,
+                    "axisAlpha": 1,
+                    "position": "left",
+                    "color": "#2a5b67"
+                },
+                 {
+                     "id": disPlayParams[5],
+                     "axisColor": "#FF00FF",
+                     "axisThickness": 2,
+                     "gridAlpha": 0,
+                     "offset": 100,
+                     "axisAlpha": 1,
+                     "position": "right",
+                     "color": "#2a5b67"
+                 },
+
+                  {
+                      "id": disPlayParams[6],
+                      "axisColor": "#808000",
+                      "axisThickness": 2,
+                      "gridAlpha": 0,
+                      "offset": 150,
+                      "axisAlpha": 1,
+                      "position": "left",
+                      "color": "#2a5b67"
+                  },
+                   {
+                       "id": disPlayParams[7],
+                       "axisColor": "#00FF00",
+                       "axisThickness": 2,
+                       "gridAlpha": 0,
+                       "offset": 150,
+                       "axisAlpha": 1,
+                       "position": "right",
+                       "color": "#2a5b67"
+                   },
+                    {
+                        "id": disPlayParams[8],
+                        "axisColor": "#0000FF",
+                        "axisThickness": 2,
+                        "gridAlpha": 0,
+                        "offset": 200,
+                        "axisAlpha": 1,
+                        "position": "left",
+                        "color": "#2a5b67"
+                    },
+                     {
+                         "id": disPlayParams[9],
+                         "axisColor": "#800080",
+                         "axisThickness": 2,
+                         "gridAlpha": 0,
+                         "offset": 200,
+                         "axisAlpha": 1,
+                         "position": "right",
+                         "color": "#2a5b67"
+                     },
+
+                ],
+                "graphs": [{
+
+                    "valueAxis": disPlayParams[0],
+                    "lineColor": "#FF6600",
+                    "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[0] + ": [[axisY1]]<br></b>",
+                    "bullet": "round",
+                    "bulletBorderThickness": 1,
+                    "hideBulletsCount": 30,
+                    "title": y[0],
+                    "color": "#fff",
+                    "valueField": "axisY1",
+                    "fillAlphas": 0
+                }, {
+                    "valueAxis": disPlayParams[1],
+                    "lineColor": "#FCD202",
+                    "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[1] + ": [[axisY2]]<br></b>",
+                    "bullet": "square",
+                    "bulletBorderThickness": 1,
+                    "hideBulletsCount": 30,
+                    "title": y[1],
+                    "color": "#fff",
+                    "valueField": "axisY2",
+                    "fillAlphas": 0
+                }, {
+                    "valueAxis": disPlayParams[2],
+                    "lineColor": "#B0DE09",
+                    "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[2] + ": [[axisY3]]<br></b>",
+                    "bullet": "triangleUp",
+                    "bulletBorderThickness": 1,
+                    "hideBulletsCount": 30,
+                    "title": y[2],
+                    "color": "#fff",
+                    "valueField": "axisY3",
+                    "fillAlphas": 0
+                }, {
+                    "valueAxis": disPlayParams[3],
+                    "lineColor": "#00FFFF",
+                    "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[3] + ": [[axisY4]]<br></b>",
+                    "bullet": "triangleUp",
+                    "bulletBorderThickness": 1,
+                    "hideBulletsCount": 30,
+                    "title": y[3],
+                    "color": "#00FFFF",
+                    "valueField": "axisY4",
+                    "fillAlphas": 0
+                },
+                {
+                    "valueAxis": disPlayParams[4],
+                    "lineColor": "#7e906e",
+                    "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[4] + ": [[axisY4]]<br></b>",
+                    "bullet": "triangleUp",
+                    "bulletBorderThickness": 1,
+                    "hideBulletsCount": 30,
+                    "title": y[4],
+                    "color": "#00FFFF",
+                    "valueField": "axisY5",
+                    "fillAlphas": 0
+                },
+                 {
+                     "valueAxis": disPlayParams[5],
+                     "lineColor": "#FF00FF",
+                     "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[5] + ": [[axisY4]]<br></b>",
+                     "bullet": "triangleUp",
+                     "bulletBorderThickness": 1,
+                     "hideBulletsCount": 30,
+                     "title": y[5],
+                     "color": "#00FFFF",
+                     "valueField": "axisY6",
+                     "fillAlphas": 0
+                 },
+                  {
+                      "valueAxis": disPlayParams[6],
+                      "lineColor": "#808000",
+                      "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[6] + ": [[axisY4]]<br></b>",
+                      "bullet": "triangleUp",
+                      "bulletBorderThickness": 1,
+                      "hideBulletsCount": 30,
+                      "title": y[6],
+                      "color": "#00FFFF",
+                      "valueField": "axisY7",
+                      "fillAlphas": 0
+                  },
+                   {
+                       "valueAxis": disPlayParams[7],
+                       "lineColor": "#00FF00",
+                       "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[7] + ": [[axisY4]]<br></b>",
+                       "bullet": "triangleUp",
+                       "bulletBorderThickness": 1,
+                       "hideBulletsCount": 30,
+                       "title": y[7],
+                       "color": "#00FFFF",
+                       "valueField": "axisY8",
+                       "fillAlphas": 0
+                   },
+                    {
+                        "valueAxis": disPlayParams[8],
+                        "lineColor": "#0000FF",
+                        "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[8] + ": [[axisY4]]<br></b>",
+                        "bullet": "triangleUp",
+                        "bulletBorderThickness": 1,
+                        "hideBulletsCount": 30,
+                        "title": y[8],
+                        "color": "#00FFFF",
+                        "valueField": "axisY9",
+                        "fillAlphas": 0
+                    },
+                       {
+                           "valueAxis": disPlayParams[9],
+                           "lineColor": "#800080",
+                           "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[9] + ": [[axisY4]]<br></b>",
+                           "bullet": "triangleUp",
+                           "bulletBorderThickness": 1,
+                           "hideBulletsCount": 30,
+                           "title": y[9],
+                           "color": "#00FFFF",
+                           "valueField": "axisY10",
+                           "fillAlphas": 0
+                       },
+                ],
+                "chartScrollbar": {
+                    "graph": "g1",
+                    "scrollbarHeight": 80,
+                    "backgroundAlpha": 0,
+                    "selectedBackgroundAlpha": 0.1,
+                    "selectedBackgroundColor": "#888888",
+                    "graphFillAlpha": 0,
+                    "graphLineAlpha": 0.5,
+                    "selectedGraphFillAlpha": 0,
+                    "selectedGraphLineAlpha": 1,
+                    "autoGridCount": true,
+                    "color": "#2a5b67"
+                },
+                "chartCursor": {
+                    "categoryBalloonDateFormat": "MM/DD/YYYY HH:NN:SS",
+                    "cursorPosition": "mouse"
+                },
+                "categoryField": "Date",
+                "categoryAxis": {
+                    "minPeriod": "ss",
+                    "parseDates": true,
+                    "color": "#2a5b67",
+                    "autoGridCount": true
+                },
+
+                "export": {
+                    "enabled": true,
+                    "exportTitles": true,
+                    "dateFormat": "YYYY-MM-DD HH:NN:SS"
+                },
+                "listeners": [{
+                    "event": "rendered",
+                    "method": function (e) {
+                        var curtain = document.getElementById("curtain");
+                        // curtain.parentElement.removeChild(curtain);
+                        $("#curtain").hide();
+                        $("#chartdiv").show();
+                    }
+
+                }]
+            }, 2000);
+
+
+        }
+        else {
+            var chartData = generateChartData1();
+            var disPlayParams = columnY;
+            //  var disPlayParamNames = ["Date", "M12901", "M12904", "M12908", "M12915", "M12911", "M12913"]
+            var chart = AmCharts.makeChart("chartdiv", {
+                "type": "serial",
+                "theme": "light",
+                "marginRight": 0,
+                "dataProvider": chartData,
+                "legend": {
+                    "useGraphSettings": true,
+                    "color": "#2a5b67",
+                    "fontSize": 15,
+                },
+                "valueAxes": [{
+                    "id": disPlayParams[0],
+                    "axisColor": "#FF6600",
+                    "axisThickness": 2,
+                    "axisAlpha": 1,
+                    "position": "left",
+                    "color": "#2a5b67"
+                }, {
+                    "id": disPlayParams[1],
+                    "axisColor": "#FCD202",
+                    "axisThickness": 2,
+                    "axisAlpha": 1,
+                    "position": "right",
+                    "color": "#2a5b67"
+                }, {
+                    "id": disPlayParams[2],
+                    "axisColor": "#B0DE09",
+                    "axisThickness": 2,
+                    "gridAlpha": 0,
+                    "offset": 50,
+                    "axisAlpha": 1,
+                    "position": "left",
+                    "color": "#2a5b67"
+                }, {
+                    "id": disPlayParams[3],
+                    "axisColor": "#00FFFF",
+                    "axisThickness": 2,
+                    "gridAlpha": 0,
+                    "offset": 50,
+                    "axisAlpha": 1,
+                    "position": "right",
+                    "color": "#2a5b67"
+                },
+                {
+                    "id": disPlayParams[4],
+                    "axisColor": "#7e906e",
+                    "axisThickness": 2,
+                    "gridAlpha": 0,
+                    "offset": 100,
+                    "axisAlpha": 1,
+                    "position": "left",
+                    "color": "#2a5b67"
+                },
+                 {
+                     "id": disPlayParams[5],
+                     "axisColor": "#FF00FF",
+                     "axisThickness": 2,
+                     "gridAlpha": 0,
+                     "offset": 100,
+                     "axisAlpha": 1,
+                     "position": "right",
+                     "color": "#2a5b67"
+                 },
+
+                  {
+                      "id": disPlayParams[6],
+                      "axisColor": "#808000",
+                      "axisThickness": 2,
+                      "gridAlpha": 0,
+                      "offset": 150,
+                      "axisAlpha": 1,
+                      "position": "left",
+                      "color": "#2a5b67"
+                  },
+                   {
+                       "id": disPlayParams[7],
+                       "axisColor": "#00FF00",
+                       "axisThickness": 2,
+                       "gridAlpha": 0,
+                       "offset": 150,
+                       "axisAlpha": 1,
+                       "position": "right",
+                       "color": "#2a5b67"
+                   },
+                    {
+                        "id": disPlayParams[8],
+                        "axisColor": "#0000FF",
+                        "axisThickness": 2,
+                        "gridAlpha": 0,
+                        "offset": 200,
+                        "axisAlpha": 1,
+                        "position": "left",
+                        "color": "#2a5b67"
+                    },
+                     {
+                         "id": disPlayParams[9],
+                         "axisColor": "#800080",
+                         "axisThickness": 2,
+                         "gridAlpha": 0,
+                         "offset": 200,
+                         "axisAlpha": 1,
+                         "position": "right",
+                         "color": "#2a5b67"
+                     },
+
+                ],
+                "graphs": [{
+
+                    "valueAxis": disPlayParams[0],
+                    "lineColor": "#FF6600",
+                    "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[0] + ": [[axisY1]]<br></b>",
+                    "bullet": "round",
+                    "bulletBorderThickness": 1,
+                    "hideBulletsCount": 30,
+                    "title": y[0],
+                    "color": "#fff",
+                    "valueField": "axisY1",
+                    "fillAlphas": 0
+                }, {
+                    "valueAxis": disPlayParams[1],
+                    "lineColor": "#FCD202",
+                    "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[1] + ": [[axisY2]]<br></b>",
+                    "bullet": "square",
+                    "bulletBorderThickness": 1,
+                    "hideBulletsCount": 30,
+                    "title": y[1],
+                    "color": "#fff",
+                    "valueField": "axisY2",
+                    "fillAlphas": 0
+                }, {
+                    "valueAxis": disPlayParams[2],
+                    "lineColor": "#B0DE09",
+                    "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[2] + ": [[axisY3]]<br></b>",
+                    "bullet": "triangleUp",
+                    "bulletBorderThickness": 1,
+                    "hideBulletsCount": 30,
+                    "title": y[2],
+                    "color": "#fff",
+                    "valueField": "axisY3",
+                    "fillAlphas": 0
+                }, {
+                    "valueAxis": disPlayParams[3],
+                    "lineColor": "#00FFFF",
+                    "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[3] + ": [[axisY4]]<br></b>",
+                    "bullet": "triangleUp",
+                    "bulletBorderThickness": 1,
+                    "hideBulletsCount": 30,
+                    "title": y[3],
+                    "color": "#00FFFF",
+                    "valueField": "axisY4",
+                    "fillAlphas": 0
+                },
+                {
+                    "valueAxis": disPlayParams[4],
+                    "lineColor": "#7e906e",
+                    "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[4] + ": [[axisY4]]<br></b>",
+                    "bullet": "triangleUp",
+                    "bulletBorderThickness": 1,
+                    "hideBulletsCount": 30,
+                    "title": y[4],
+                    "color": "#00FFFF",
+                    "valueField": "axisY5",
+                    "fillAlphas": 0
+                },
+                 {
+                     "valueAxis": disPlayParams[5],
+                     "lineColor": "#FF00FF",
+                     "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[5] + ": [[axisY4]]<br></b>",
+                     "bullet": "triangleUp",
+                     "bulletBorderThickness": 1,
+                     "hideBulletsCount": 30,
+                     "title": y[5],
+                     "color": "#00FFFF",
+                     "valueField": "axisY6",
+                     "fillAlphas": 0
+                 },
+                  {
+                      "valueAxis": disPlayParams[6],
+                      "lineColor": "#808000",
+                      "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[6] + ": [[axisY4]]<br></b>",
+                      "bullet": "triangleUp",
+                      "bulletBorderThickness": 1,
+                      "hideBulletsCount": 30,
+                      "title": y[6],
+                      "color": "#00FFFF",
+                      "valueField": "axisY7",
+                      "fillAlphas": 0
+                  },
+                   {
+                       "valueAxis": disPlayParams[7],
+                       "lineColor": "#00FF00",
+                       "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[7] + ": [[axisY4]]<br></b>",
+                       "bullet": "triangleUp",
+                       "bulletBorderThickness": 1,
+                       "hideBulletsCount": 30,
+                       "title": y[7],
+                       "color": "#00FFFF",
+                       "valueField": "axisY8",
+                       "fillAlphas": 0
+                   },
+                    {
+                        "valueAxis": disPlayParams[8],
+                        "lineColor": "#0000FF",
+                        "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[8] + ": [[axisY4]]<br></b>",
+                        "bullet": "triangleUp",
+                        "bulletBorderThickness": 1,
+                        "hideBulletsCount": 30,
+                        "title": y[8],
+                        "color": "#00FFFF",
+                        "valueField": "axisY9",
+                        "fillAlphas": 0
+                    },
+                       {
+                           "valueAxis": disPlayParams[9],
+                           "lineColor": "#800080",
+                           "balloonText": "<b>Job No :" + job + "</b><br/><b>Model :" + mod + "</b><br /><b>Serial No:" + serialno + "</b><br/><b>Diameter :" + diametre + "</b><br /><b>Material :" + material + "</b><br/><b>" + y[9] + ": [[axisY4]]<br></b>",
+                           "bullet": "triangleUp",
+                           "bulletBorderThickness": 1,
+                           "hideBulletsCount": 30,
+                           "title": y[9],
+                           "color": "#00FFFF",
+                           "valueField": "axisY10",
+                           "fillAlphas": 0
+                       },
+                ],
+                "chartScrollbar": {
+                    "graph": "g1",
+                    "gridAlpha": 0,
+                    "color": "#2a5b67",
+                    "scrollbarHeight": 55,
+                    "backgroundAlpha": 0,
+                    "selectedBackgroundAlpha": 0.1,
+                    "selectedBackgroundColor": "#888888",
+                    "graphFillAlpha": 0,
+                    "autoGridCount": true,
+                    "selectedGraphFillAlpha": 0,
+                    "graphLineAlpha": 0.2,
+                    "graphLineColor": "#c2c2c2",
+                    "selectedGraphLineColor": "#888888",
+                    "selectedGraphLineAlpha": 1
+                },
+                "chartCursor": {
+                    "categoryBalloonDateFormat": "YYYY",
+                    "cursorAlpha": 0,
+                    "valueLineEnabled": true,
+                    "valueLineBalloonEnabled": true,
+                    "valueLineAlpha": 0.5,
+                    "fullWidth": true
+                },
+                "categoryField": "axisX",
+                "categoryAxis": {
+                    "logarithmic": false,
+                    "autoGridCount": false,
+                    "minVerticalGap": 40,
+                    "gridCount": 10,
+                    "color": "#2a5b67"
+                },
+
+
+                "export": {
+                    "enabled": true,
+                    "exportTitles": true,
+                    "dateFormat": "YYYY-MM-DD HH:NN:SS"
+                },
+                "listeners": [{
+                    "event": "rendered",
+                    "method": function (e) {
+                        var curtain = document.getElementById("curtain");
+                        // curtain.parentElement.removeChild(curtain);
+                        $("#curtain").hide();
+                        $("#chartdiv").show();
+                    }
+                }]
+            }, 3000);
+
+
+        }
+
+
+
+        // generate some random data, quite different range
+        function generateChartData() {
+            var chartData = [];
+            // current date
+
+            var arrData = strinarray;
+           
+            try {
+                var countpoints = arrData.length;
+            } catch (e) {
+                $("#vikash").text("No Data found!!! Reason is Column Not available in Database or There is No data for the given Date-Time Range.");
+                $("#myModal").modal();
+               // alert("No Data found!!! Reason is eighter Column Not available in Database or There is No data for the given Date-Time Range.");
+                return null;
+            }
+            var intDatapoints = arrData.length;
+            // and generate 500 data items
+            for (var i = 0; i < intDatapoints; i++) {
+                var axisX = new Date(arrData[i][0]);
+                axisX.setMonth(axisX.getMonth() - 1);
+                var axisY1 = arrData[i][1];
+                var axisY2 = arrData[i][2];
+                var axisY3 = arrData[i][3];
+                var axisY4 = arrData[i][4];
+                var axisY5 = arrData[i][5];
+                var axisY6 = arrData[i][6];
+                var axisY7 = arrData[i][7];
+                var axisY8 = arrData[i][8];
+                var axisY9 = arrData[i][9];
+                var axisY10 = arrData[i][10];
+
+
+                chartData.push({
+                    Date: axisX,
+                    axisY1: axisY1,
+                    axisY2: axisY2,
+                    axisY3: axisY3,
+                    axisY4: axisY4,
+                    axisY5: axisY5,
+                    axisY6: axisY6,
+                    axisY7: axisY7,
+                    axisY8: axisY8,
+                    axisY9: axisY9,
+                    axisY10: axisY10,
+
+                });
+            }
+            return chartData;
+        }
+
+        function generateChartData1() {
+            var chartData = [];
+            // current date
+
+            var arrData = strinarray;
+            try {
+                var countpoints = arrData.length;
+            } catch (e) {
+                $("#vikash").text("No Data found!!! Reason is Column Not available in Database or There is No data for the given Date-Time Range.");
+                $("#myModal").modal();
+                //alert("No Data found!!! Reason is eighter Column Not available in Database or There is No data for the given Date-Time Range.");
+                return null;
+            }
+            var intDatapoints = arrData.length;
+            
+            for (var i = 0; i < intDatapoints; i++) {             
+                var axisX = arrData[i][0];               
+                var axisY1 = arrData[i][1];
+                var axisY2 = arrData[i][2];
+                var axisY3 = arrData[i][3];
+                var axisY4 = arrData[i][4];
+                var axisY5 = arrData[i][5];
+                var axisY6 = arrData[i][6];
+                var axisY7 = arrData[i][7];
+                var axisY8 = arrData[i][8];
+                var axisY9 = arrData[i][9];
+                var axisY10 = arrData[i][10];
+
+                chartData.push({
+                    axisX: axisX,
+                    axisY1: axisY1,
+                    axisY2: axisY2,
+                    axisY3: axisY3,
+                    axisY4: axisY4,
+                    axisY5: axisY5,
+                    axisY6: axisY6,
+                    axisY7: axisY7,
+                    axisY8: axisY8,
+                    axisY9: axisY9,
+                    axisY10: axisY10,
+
+
+                });
+            }
+            return chartData;
+        }
+
+
+
+
+
+    });
+
+    $('#SubmitEvents').click(function () {
+        if (valid) {
+            $("#curtain").show();
+            $("#chartdiv").hide();
+        }
+
+        var test1;
+        var test2;
+        var SN = [];
+        var job = [];
+        var model1 = [];
+        var diameter = [];
+        var material = [];
+        var sysCol = [];
+        var sysColx = [];
+        var text = [];
+        var events = [];
+        if ($('#ddlDmeter').val() && $('#ddlMachineMaterial').val() && $('#ddlMachineSerialNo').val() && $('#ddlMachine').val()) {
+
+        }
+        else {
+            $("#curtain").hide();
+            $("#vikash").text("Please Check  the filter dropdown");
+            $("#myModal").modal();
+            //alert("Please Check  the filter dropdown");
+          
+            return false;
+        }
+        var ddlDmeter = $('#ddlDmeter').val().toString();
+        var ddlMachineMaterial = $('#ddlMachineMaterial').val().toString();
+        var mod1 = $('#ddlMachine').val();
+        var mod = mod1.toString();
+        //alert("mod ="+ mod);
+        //console.log("mod " + mod);
+        var ddlMachineSerialNo = $('#ddlMachineSerialNo').val().toString();
+
+        var datestringstart = $('#startdate').val();
+        var datestringEnd = $('#enddate').val();
+        var startDate = [];
+        var endDate = [];
+        if (datestringstart != null && datestringEnd) {
+            startDate = datestringstart.split(' ');
+            endDate = datestringEnd.split(' ');
+            var datesplit = [];
+            var timesplit = [];
+            datesplit = startDate[0].toString().split('/');
+            timesplit = startDate[1].toString().split(':');
+            var yyyy = parseInt(datesplit[2]);
+            var mm = parseInt(datesplit[0]);
+            var dd = parseInt(datesplit[1]);
+
+            var starthh = parseInt(timesplit[0]);
+            var startmm = parseInt(timesplit[1]);
+            var startss = parseInt(timesplit[2]);
+
+            var datesplitend = [];
+            var timesplitend = [];
+            datesplitend = endDate[0].toString().split('/');
+            timesplitend = endDate[1].toString().split(':');
+            var yyyyend = parseInt(datesplitend[2]);
+            var mmend = parseInt(datesplitend[0]);
+            var ddend = parseInt(datesplitend[1]);
+
+            var hhend = parseInt(timesplitend[0]);
+            var minend = parseInt(timesplitend[1]);
+            var ssend = parseInt(timesplitend[2]);
+        }
+
+        $('#SN input:checked').each(function () {
+            SN.push($(this).attr('value'));
+        });
+        $('#Job input:checked').each(function () {
+            job.push($(this).attr('value'));
+        });
+        $('#Model input:checked').each(function () {
+            model1.push($(this).attr('value'));
+        });
+        $('#sysColumn input:checked').each(function () {
+            sysCol.push($(this).attr('value'));
+            text.push($(this).attr('text'));
+        });
+        $('#sysColumnx input:checked').each(function () {
+            sysColx.push($(this).attr('value'));
+        });
+
+        var textmapping = "";
+        $("#ddlSystemColumns option:selected").each(function () {
+            textmapping += $(this).text() + ",";
+        });
+        $('#Events input:checked').each(function () {
+            events.push($(this).attr('value'));
+        });
+
+        var str = textmapping.replace(/,\s*$/, "");
+        var y = [];
+        y = str.split(',');
+        var syscolumn = sysCol.toString();
+        syscolumn = syscolumn.replace('multiselect-all,', '');
+        var syscolumnx = sysColx.toString();
+        var SN = $('#ddlMachineSerialNo').val();
+        var sn = SN.toString();
+        var diametre = $('#ddlDmeter').val();
+        var material = $('#ddlMachineMaterial').val();
+        var eventslog = events.toString().replace('multiselect-all,', '');
+
+        if (!eventslog.length) {
+            $("#curtain").hide();
+            $("#vikash").text("Please select Events Column!!!!");
+            $("#myModal").modal();
+            //alert("Please select Events Column!!!!");
+           
+            return null;
+        }
+
+
+        var serialno = sn.replace('multiselect-all,', '');
+        //var mod = model1.toString();
+        var job = job.toString();
+        job = job.replace('multiselect-all,', '');
+        var columnY = [];
+        var axisX = sysColx.toString();
+        var diam = diameter.toString();
+        var mater = material.toString();
+        //var columnY = [];
+        columnY = syscolumn.split(',');
+        var columnevents = [];
+        columnevents = eventslog.split(',');
+        var count = $("#ddlSystemColumns :selected").length;
+
+        var jsonData = $.ajax({
+            url: "DataTableToJSONWithJavaScriptSerializerEvents/ChartController",
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            data: { 'machine': sn, 'mod': mod, 'job': job, 'startdate': datestringstart, 'enddate': datestringEnd, 'syscolumn': syscolumn, 'axisX': syscolumnx, 'eventscol': eventslog, 'diameter': diametre, 'material': material },
+            success: function (data) {
+
+            },
+            error: function (xhr, status) {
+                valid = false;
+                $("#curtain").hide();
+                $("#chartdiv").hide();
+                //alert('No Data Found');
+                $("#vikash").text("No Data Found!!!");
+                $("#myModal").modal();
+
+            }
+
+        }).responseText;
+
+
+        // console.log(jsonData);
+
+        var strinarray = eval(jsonData);
+
+
+        var chartData = generateChartData();
+        var disPlayParams = columnY;
+        var Diff = hhend - starthh;
+        if (Diff < 6) {
+            var chart = AmCharts.makeChart("chartdiv", {
+                "type": "serial",
+                "theme": "light",
+                "marginRight": 0,
+                "dataProvider": chartData,
+                "legend": {
+                    "useGraphSettings": true,
+                    "color": "#2a5b67",
+                    "fontSize": 15,
+                },
+                "valueAxes": [{
+                    "id": disPlayParams[0],
+                    "axisColor": "#FCD202",
+                    "axisThickness": 2,
+                    "axisAlpha": 1,
+                    "position": "right",
+                    "color": "#2a5b67"
+                }, {
+                    "id": disPlayParams[1],
+                    "axisColor": "#B0DE09",
+                    "axisThickness": 2,
+                    "gridAlpha": 0,
+                    "offset": 50,
+                    "axisAlpha": 1,
+                    "position": "left",
+                    "color": "#2a5b67"
+                }, {
+                    "id": disPlayParams[2],
+                    "axisColor": "#00FFFF",
+                    "axisThickness": 2,
+                    "gridAlpha": 0,
+                    "offset": 50,
+                    "axisAlpha": 1,
+                    "position": "right",
+                    "color": "#2a5b67"
+                },
+               {
+                   "id": disPlayParams[3],
+                   "axisColor": "#7e906e",
+                   "axisThickness": 2,
+                   "gridAlpha": 0,
+                   "offset": 100,
+                   "axisAlpha": 1,
+                   "position": "left",
+                   "color": "#2a5b67"
+               },
+                {
+                    "id": disPlayParams[4],
+                    "axisColor": "#FF00FF",
+                    "axisThickness": 2,
+                    "gridAlpha": 0,
+                    "offset": 100,
+                    "axisAlpha": 1,
+                    "position": "right",
+                    "color": "#2a5b67"
+                },
+
+                 {
+                     "id": disPlayParams[5],
+                     "axisColor": "#808000",
+                     "axisThickness": 2,
+                     "gridAlpha": 0,
+                     "offset": 150,
+                     "axisAlpha": 1,
+                     "position": "left",
+                     "color": "#2a5b67"
+                 },
+                  {
+                      "id": disPlayParams[6],
+                      "axisColor": "#00FF00",
+                      "axisThickness": 2,
+                      "gridAlpha": 0,
+                      "offset": 150,
+                      "axisAlpha": 1,
+                      "position": "right",
+                      "color": "#2a5b67"
+                  },
+                   {
+                       "id": disPlayParams[7],
+                       "axisColor": "#0000FF",
+                       "axisThickness": 2,
+                       "gridAlpha": 0,
+                       "offset": 200,
+                       "axisAlpha": 1,
+                       "position": "left",
+                       "color": "#2a5b67"
+                   },
+                    {
+                        "id": disPlayParams[8],
+                        "axisColor": "#800080",
+                        "axisThickness": 2,
+                        "gridAlpha": 0,
+                        "offset": 200,
+                        "axisAlpha": 1,
+                        "position": "right",
+                        "color": "#2a5b67"
+                    }],
+
+                "graphs": [{
+                    "valueAxis": "eventalarm",
+                    "lineColor": "#FF0000",
+
+                    "title": "eventalarm",
+                    "color": "#FF0000",
+                    "valueField": "axisY1",
+                    "fillAlphas": 0,
+                    "bullet": "round",
+                    "bulletSize": 15,
+                    "bulletField": "bullet",
+                    "bulletSizeField": "bulletSize",
+                    "balloonFunction": function (graphDataItem, graph) {
+                        var value = graphDataItem.values.value;
+                        if (value == 1) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Advance Motion Timeout Fault)";
+                        } else if (value == 2) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Advance Motion Timeout Warning to Customer)";
+                        }
+                        else if (value == 3) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Advance Pressure Transducer Signal Loss Fault)";
+                        }
+                        else if (value == 4) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Advance Warning Timeout to Customer)";
+                        }
+                        else if (value == 5) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Auto Cycle Running)";
+                        }
+                        else if (value == 6) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Customer Adjustment Password Screen)";
+                        }
+                        else if (value == 7) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Customer Adjustment Screen Active)";
+                        }
+                        else if (value == 8) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Customer Hardwire Speed Signal Loss Fault)";
+                        }
+                        else if (value == 9) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Customer Password Screen Active)";
+                        }
+                        else if (value == 10) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Datalog Memory Management Screen Active)";
+                        }
+                        else if (value == 11) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Final Clean Cycle is Running)";
+                        }
+                        else if (value == 12) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Final Clean Cycle Started)";
+                        }
+                        else if (value == 13) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Hydraulic AUX Pump Running)";
+                        }
+                        else if (value == 14) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Hydraulic Oil High Temp Fault)";
+                        }
+                        else if (value == 15) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Hydraulic Pump Starter AUX contact Fault)";
+                        }
+                        else if (value == 16) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Hydraulic Pump Starter AUX Fault)";
+                        }
+                        else if (value == 17) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Initial Clean Cycle is Running)";
+                        }
+                        else if (value == 18) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Initial Clean Cycle Started)";
+                        }
+                        else if (value == 19) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Laidig Service Only Adjustment Screen Active)";
+                        }
+                        else if (value == 20) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Laidig Service Only Password Screen Active)";
+                        }
+                        else if (value == 21) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(LMI E-Stop has been Activated)";
+                        }
+                        else if (value == 22) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(LMI in Auto Mode)";
+                        }
+                        else if (value == 23) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(LMI in Manual Mode)";
+                        }
+                        else if (value == 24) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(LMI Reset Button Pushed)";
+                        }
+                        else if (value == 25) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Manual Run Time Limit Exceeded)";
+                        }
+                        else if (value == 26) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(OK to Fill)";
+                        }
+                        else if (value == 27) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Power Loss When in Auto or Manual Fault)";
+                        }
+                        else if (value == 28) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Reclaim Plug Pressure Fault)";
+                        }
+                        else if (value == 29) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Reclaim UNLoad Valve Routine Active)";
+                        }
+                        else if (value == 30) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Reclaimer Final Cleanout Run Command is Active)";
+                        }
+                        else if (value == 31) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Reclaimer Initial Cleanout Run Command is Active)";
+                        }
+                        else if (value == 32) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Remote System Imediate Stop has been Activated)";
+                        }
+                        else if (value == 33) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Remote System Immediate Stop has been Activated)";
+                        }
+                        else if (value == 34) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Safety Protocals are Removed)";
+                        }
+                        else if (value == 35) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Safety Protocals are Restored)";
+                        }
+                        else if (value == 36) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Service Adjustment Password Screen)";
+                        }
+                        else if (value == 37) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Service Adjustment Screen Active)";
+                        }
+                        else if (value == 38) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(Silo Filling Input Signal ON)";
+                        }
+                        else if (value == 39) {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>(System Safety Protocals Removed)";
+                        }
+                        else {
+                            return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + "<b><br/>Not in the list";
+                        }
+                    }
+                },
+                        {
+                            "valueAxis": disPlayParams[0],
+                            "lineColor": "#FCD202",
+                            "balloonText": "<b>Job No :" + job + "</b><br/>Serial No:" + serialno + "</b><br/><b>" + y[0] + ": [[axisY2]]<br></b>",
+                            "bullet": "square",
+                            "bulletBorderThickness": 1,
+                            "hideBulletsCount": 30,
+                            "title": y[0],
+                            "color": "#fff",
+                            "valueField": "axisY2",
+                            "fillAlphas": 0
+                        }, {
+                            "valueAxis": disPlayParams[1],
+                            "lineColor": "#B0DE09",
+                            "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[1] + ": [[axisY3]]<br></b>",
+                            "bullet": "triangleUp",
+                            "bulletBorderThickness": 1,
+                            "hideBulletsCount": 30,
+                            "title": y[1],
+                            "color": "#fff",
+                            "valueField": "axisY3",
+                            "fillAlphas": 0
+                        }, {
+                            "valueAxis": disPlayParams[2],
+                            "lineColor": "#00FFFF",
+                            "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[2] + ": [[axisY4]]<br></b>",
+                            "bullet": "triangleUp",
+                            "bulletBorderThickness": 1,
+                            "hideBulletsCount": 30,
+                            "title": y[3],
+                            "color": "#00FFFF",
+                            "valueField": "axisY4",
+                            "fillAlphas": 0
+                        },
+                    {
+                        "valueAxis": disPlayParams[3],
+                        "lineColor": "#7e906e",
+                        "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[3] + ": [[axisY5]]<br></b>",
+                        "bullet": "triangleUp",
+                        "bulletBorderThickness": 1,
+                        "hideBulletsCount": 30,
+                        "title": y[3],
+                        "color": "#00FFFF",
+                        "valueField": "axisY5",
+                        "fillAlphas": 0
+                    },
+                     {
+                         "valueAxis": disPlayParams[4],
+                         "lineColor": "#FF00FF",
+                         "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[4] + ": [[axisY6]]<br></b>",
+                         "bullet": "triangleUp",
+                         "bulletBorderThickness": 1,
+                         "hideBulletsCount": 30,
+                         "title": y[4],
+                         "color": "#00FFFF",
+                         "valueField": "axisY6",
+                         "fillAlphas": 0
+                     },
+                      {
+                          "valueAxis": disPlayParams[5],
+                          "lineColor": "#808000",
+                          "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[5] + ": [[axisY7]]<br></b>",
+                          "bullet": "triangleUp",
+                          "bulletBorderThickness": 1,
+                          "hideBulletsCount": 30,
+                          "title": y[5],
+                          "color": "#00FFFF",
+                          "valueField": "axisY7",
+                          "fillAlphas": 0
+                      },
+                       {
+                           "valueAxis": disPlayParams[6],
+                           "lineColor": "#00FF00",
+                           "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[6] + ": [[axisY8]]<br></b>",
+                           "bullet": "triangleUp",
+                           "bulletBorderThickness": 1,
+                           "hideBulletsCount": 30,
+                           "title": y[6],
+                           "color": "#00FFFF",
+                           "valueField": "axisY8",
+                           "fillAlphas": 0
+                       },
+                        {
+                            "valueAxis": disPlayParams[7],
+                            "lineColor": "#0000FF",
+                            "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[7] + ": [[axisY9]]<br></b>",
+                            "bullet": "triangleUp",
+                            "bulletBorderThickness": 1,
+                            "hideBulletsCount": 30,
+                            "title": y[7],
+                            "color": "#00FFFF",
+                            "valueField": "axisY9",
+                            "fillAlphas": 0
+                        },
+                           {
+                               "valueAxis": disPlayParams[8],
+                               "lineColor": "#800080",
+                               "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[8] + ": [[axisY10]]<br></b>",
+                               "bullet": "triangleUp",
+                               "bulletBorderThickness": 1,
+                               "hideBulletsCount": 30,
+                               "title": y[8],
+                               "color": "#00FFFF",
+                               "valueField": "axisY10",
+                               "fillAlphas": 0
+                           },
+                ],
+                "chartScrollbar": {
+                    "graph": "g1",
+                    "scrollbarHeight": 80,
+                    "backgroundAlpha": 0,
+                    "selectedBackgroundAlpha": 0.1,
+                    "selectedBackgroundColor": "#888888",
+                    "graphFillAlpha": 0,
+                    "graphLineAlpha": 0.5,
+                    "selectedGraphFillAlpha": 0,
+                    "selectedGraphLineAlpha": 1,
+                    "autoGridCount": true,
+                    "color": "#2a5b67"
+                },
+                "chartCursor": {
+                    "categoryBalloonDateFormat": "MM/DD/YYYY HH:NN:SS",
+                    "cursorPosition": "mouse"
+                },
+                "categoryField": "Date",
+                "categoryAxis": {
+                    "minPeriod": "ss",
+                    "parseDates": true,
+                    "color": "#2a5b67",
+                    "autoGridCount": true
+                },
+
+                "export": {
+                    "enabled": true,
+                    "exportTitles": true,
+                    "dateFormat": "YYYY-MM-DD HH:NN:SS"
+                },
+                "listeners": [{
+                    "event": "rendered",
+                    "method": function (e) {
+                        var curtain = document.getElementById("curtain");
+                        $("#curtain").hide();
+                        $("#chartdiv").show();
+                    }
+
+                }]
+            }, 2000);
+
+        }
+        else {
+            var chart = AmCharts.makeChart("chartdiv", {
+                "type": "serial",
+                "theme": "light",
+                "marginRight": 0,
+                "dataProvider": chartData,
+                "legend": {
+                    "useGraphSettings": true,
+                    "color": "#2a5b67",
+                    "fontSize": 15,
+                },
+                "valueAxes": [{
+                    "id": disPlayParams[0],
+                    "axisColor": "#FCD202",
+                    "axisThickness": 2,
+                    "axisAlpha": 1,
+                    "position": "right",
+                    "color": "#2a5b67"
+                }, {
+                    "id": disPlayParams[1],
+                    "axisColor": "#B0DE09",
+                    "axisThickness": 2,
+                    "gridAlpha": 0,
+                    "offset": 50,
+                    "axisAlpha": 1,
+                    "position": "left",
+                    "color": "#2a5b67"
+                }, {
+                    "id": disPlayParams[2],
+                    "axisColor": "#00FFFF",
+                    "axisThickness": 2,
+                    "gridAlpha": 0,
+                    "offset": 50,
+                    "axisAlpha": 1,
+                    "position": "right",
+                    "color": "#2a5b67"
+                },
+               {
+                   "id": disPlayParams[3],
+                   "axisColor": "#7e906e",
+                   "axisThickness": 2,
+                   "gridAlpha": 0,
+                   "offset": 100,
+                   "axisAlpha": 1,
+                   "position": "left",
+                   "color": "#2a5b67"
+               },
+                {
+                    "id": disPlayParams[4],
+                    "axisColor": "#FF00FF",
+                    "axisThickness": 2,
+                    "gridAlpha": 0,
+                    "offset": 100,
+                    "axisAlpha": 1,
+                    "position": "right",
+                    "color": "#2a5b67"
+                },
+
+                 {
+                     "id": disPlayParams[5],
+                     "axisColor": "#808000",
+                     "axisThickness": 2,
+                     "gridAlpha": 0,
+                     "offset": 150,
+                     "axisAlpha": 1,
+                     "position": "left",
+                     "color": "#2a5b67"
+                 },
+                  {
+                      "id": disPlayParams[6],
+                      "axisColor": "#00FF00",
+                      "axisThickness": 2,
+                      "gridAlpha": 0,
+                      "offset": 150,
+                      "axisAlpha": 1,
+                      "position": "right",
+                      "color": "#2a5b67"
+                  },
+                   {
+                       "id": disPlayParams[7],
+                       "axisColor": "#0000FF",
+                       "axisThickness": 2,
+                       "gridAlpha": 0,
+                       "offset": 200,
+                       "axisAlpha": 1,
+                       "position": "left",
+                       "color": "#2a5b67"
+                   },
+                    {
+                        "id": disPlayParams[8],
+                        "axisColor": "#800080",
+                        "axisThickness": 2,
+                        "gridAlpha": 0,
+                        "offset": 200,
+                        "axisAlpha": 1,
+                        "position": "right",
+                        "color": "#2a5b67"
+                    }],
+
+                "graphs": [{
+                    "valueAxis": "eventalarm",
+                    "lineColor": "#FF0000",
+
+                    "title": "eventalarm",
+                    "color": "#FF0000",
+                    "valueField": "axisY1",
+                    "fillAlphas": 0,
+                    "bullet": "round",
+                    "bulletSize": 15,
+                    "bulletField": "bullet",
+                    "bulletSizeField": "bulletSize",
+                    "balloonFunction": function (graphDataItem, graph) {
+                        var value = graphDataItem.values.value;
+
+                        return "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + value + " Events occurs within one Hours!! <b><br/>";
+
+                    }
+                },
+                        {
+                            "valueAxis": disPlayParams[0],
+                            "lineColor": "#FCD202",
+                            "balloonText": "<b>Job No :" + job + "</b><br/>Serial No:" + serialno + "</b><br/><b>" + y[0] + ": [[axisY2]]<br></b>",
+                            "bullet": "square",
+                            "bulletBorderThickness": 1,
+                            "hideBulletsCount": 30,
+                            "title": y[0],
+                            "color": "#fff",
+                            "valueField": "axisY2",
+                            "fillAlphas": 0
+                        }, {
+                            "valueAxis": disPlayParams[1],
+                            "lineColor": "#B0DE09",
+                            "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[1] + ": [[axisY3]]<br></b>",
+                            "bullet": "triangleUp",
+                            "bulletBorderThickness": 1,
+                            "hideBulletsCount": 30,
+                            "title": y[1],
+                            "color": "#fff",
+                            "valueField": "axisY3",
+                            "fillAlphas": 0
+                        }, {
+                            "valueAxis": disPlayParams[2],
+                            "lineColor": "#00FFFF",
+                            "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[2] + ": [[axisY4]]<br></b>",
+                            "bullet": "triangleUp",
+                            "bulletBorderThickness": 1,
+                            "hideBulletsCount": 30,
+                            "title": y[3],
+                            "color": "#00FFFF",
+                            "valueField": "axisY4",
+                            "fillAlphas": 0
+                        },
+                    {
+                        "valueAxis": disPlayParams[3],
+                        "lineColor": "#7e906e",
+                        "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[3] + ": [[axisY5]]<br></b>",
+                        "bullet": "triangleUp",
+                        "bulletBorderThickness": 1,
+                        "hideBulletsCount": 30,
+                        "title": y[3],
+                        "color": "#00FFFF",
+                        "valueField": "axisY5",
+                        "fillAlphas": 0
+                    },
+                     {
+                         "valueAxis": disPlayParams[4],
+                         "lineColor": "#FF00FF",
+                         "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[4] + ": [[axisY6]]<br></b>",
+                         "bullet": "triangleUp",
+                         "bulletBorderThickness": 1,
+                         "hideBulletsCount": 30,
+                         "title": y[4],
+                         "color": "#00FFFF",
+                         "valueField": "axisY6",
+                         "fillAlphas": 0
+                     },
+                      {
+                          "valueAxis": disPlayParams[5],
+                          "lineColor": "#808000",
+                          "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[5] + ": [[axisY7]]<br></b>",
+                          "bullet": "triangleUp",
+                          "bulletBorderThickness": 1,
+                          "hideBulletsCount": 30,
+                          "title": y[5],
+                          "color": "#00FFFF",
+                          "valueField": "axisY7",
+                          "fillAlphas": 0
+                      },
+                       {
+                           "valueAxis": disPlayParams[6],
+                           "lineColor": "#00FF00",
+                           "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[6] + ": [[axisY8]]<br></b>",
+                           "bullet": "triangleUp",
+                           "bulletBorderThickness": 1,
+                           "hideBulletsCount": 30,
+                           "title": y[6],
+                           "color": "#00FFFF",
+                           "valueField": "axisY8",
+                           "fillAlphas": 0
+                       },
+                        {
+                            "valueAxis": disPlayParams[7],
+                            "lineColor": "#0000FF",
+                            "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[7] + ": [[axisY9]]<br></b>",
+                            "bullet": "triangleUp",
+                            "bulletBorderThickness": 1,
+                            "hideBulletsCount": 30,
+                            "title": y[7],
+                            "color": "#00FFFF",
+                            "valueField": "axisY9",
+                            "fillAlphas": 0
+                        },
+                           {
+                               "valueAxis": disPlayParams[8],
+                               "lineColor": "#800080",
+                               "balloonText": "<b>Job No :" + job + "</b><br/><b>Serial No:" + serialno + "</b><br/><b>" + y[8] + ": [[axisY10]]<br></b>",
+                               "bullet": "triangleUp",
+                               "bulletBorderThickness": 1,
+                               "hideBulletsCount": 30,
+                               "title": y[8],
+                               "color": "#00FFFF",
+                               "valueField": "axisY10",
+                               "fillAlphas": 0
+                           },
+                ],
+                "chartScrollbar": {
+                    "graph": "g1",
+                    "scrollbarHeight": 80,
+                    "backgroundAlpha": 0,
+                    "selectedBackgroundAlpha": 0.1,
+                    "selectedBackgroundColor": "#888888",
+                    "graphFillAlpha": 0,
+                    "graphLineAlpha": 0.5,
+                    "selectedGraphFillAlpha": 0,
+                    "selectedGraphLineAlpha": 1,
+                    "autoGridCount": true,
+                    "color": "#2a5b67"
+                },
+                "chartCursor": {
+                    "categoryBalloonDateFormat": "MM/DD/YYYY HH:NN:SS",
+                    "cursorPosition": "mouse"
+                },
+                "categoryField": "Date",
+                "categoryAxis": {
+                    "minPeriod": "ss",
+                    "parseDates": true,
+                    "color": "#2a5b67",
+                    "autoGridCount": true
+                },
+
+                "export": {
+                    "enabled": true,
+                    "exportTitles": true,
+                    "dateFormat": "YYYY-MM-DD HH:NN:SS"
+                },
+                "listeners": [{
+                    "event": "rendered",
+                    "method": function (e) {
+                        var curtain = document.getElementById("curtain");
+                        $("#curtain").hide();
+                        $("#chartdiv").show();
+                    }
+
+                }]
+            }, 2000);
+        }
+        // generate some random data, quite different range
+        function generateChartData() {
+            var chartData = [];
+            // current date
+
+            var arrData = strinarray;
+            try {
+                var count = arrData.length;
+            } catch (e) {
+                $("#vikash").text("No Data found!!! Reason is Column Not available in Database or There is No data for the given Date-Time Range.");
+                $("#myModal").modal();
+                //alert("No Data found!!! Reason is Column Not available in Database or There is No data for the given Date-Time Range.");
+                return null;
+            }
+            var intDatapoints = arrData.length;
+            // and generate 500 data items
+            for (var i = 0; i < intDatapoints; i++) {
+                var axisX = new Date(arrData[i][0]);
+                axisX.setMonth(axisX.getMonth() - 1);
+                var event = arrData[i][1];
+                var axisY2 = arrData[i][2];
+                var axisY3 = arrData[i][3];
+                var axisY4 = arrData[i][4];
+                var axisY5 = arrData[i][5];
+                var axisY6 = arrData[i][6];
+                var axisY7 = arrData[i][7];
+                var axisY8 = arrData[i][8];
+                var axisY9 = arrData[i][9];
+                var axisY10 = arrData[i][10];
+
+                chartData.push({
+                    Date: axisX,
+                    axisY1: event,
+                    axisY2: axisY2,
+                    axisY3: axisY3,
+                    axisY4: axisY4,
+                    axisY5: axisY5,
+                    axisY6: axisY6,
+                    axisY7: axisY7,
+                    axisY8: axisY8,
+                    axisY9: axisY9,
+                    axisY10: axisY10
+
+                });
+            }
+            return chartData;
+
+        }
+
+
+
+
+
+
+    });
+   
+  
+
+
+$(document).ready(function () {
+    if ($(".inputchk input[type='checkbox']").is(":checked")) {
+        $(".inputchk input[type='checkbox']").parent().addClass("redBackground");
+        $(".inputchk input[type='checkbox']").parent().removeClass("blueBackground");
+    }
+    else {
+        $(".inputchk input[type='checkbox']").parent().removeClass("redBackground");
+        $(".inputchk input[type='checkbox']").parent().addClass("blueBackground");
+    }
+    $(".inputchk input[type='checkbox']").change(function () {
+        if ($(this).is(":checked")) {
+            $(this).parent().addClass("redBackground");
+            $(this).parent().removeClass("blueBackground");
+        }
+        else {
+            $(this).parent().removeClass("redBackground");
+            $(this).parent().addClass("blueBackground");
+        }
+    });
+
+    $(".multiselect-all").change(function () {
+        $("input:checkbox").prop('checked', $(this).prop("checked"));
+    });
+    //function multiselect_deselectAll($el) {
+    //    $('option', $el).each(function (element) {
+    //        $el.multiselect('deselect', $(this).val());
+    //    });
+    //}
+
+    //$('.multiselect').each(function () {
+    //    var select = $(this);
+    //    multiselect_deselectAll(select);
+    //});
+});
+function xAxisColumnCheck(syscolumnx) {
+    if (new String(syscolumnx).valueOf() == new String("logdatetime").valueOf) {
+        return logdatetime;
+
+    }
+}
+</script>
+<script>
+    function FillMachine() {
+        var ddlJobNo = $('#ddlJobNo').val();
+        //console.log("ddlJobNo " + ddlJobNo);
+        var job = ddlJobNo.toString();
+        //var procemessage = "<option value='0'> Please wait...</option>";
+        //$("#ddlMachine").html(procemessage).show();
+        $("#ddlMachineSerialNo").empty();
+        $("#ddlDmeter").empty();
+        $("#ddlMachineMaterial").empty();
+        $('#ddlMachineSerialNo').multiselect('rebuild');
+        $.ajax({
+            url: 'FillMachine/Chart',
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            data: { 'ddlJobNo': job },
+
+            success: function (data) {
+                var array = data.split(",");
+                var markup = "<option value='0'>None</option>";
+                for (var x = 0; x < array.length; x++) {
+                    markup += "<option value=" + array[x] + ">" + array[x] + "</option>";
+                }
+                $("#ddlMachine").html(markup).show();
+            },
+            error: function (reponse) {
+                $("#vikash").text("error : " + reponse);
+                $("#myModal").modal();
+                //alert();
+            }
+        });
+    }
+</script>
+<script>
+    function FillMachineSerialNo() {
+        var ddlJobNo = $('#ddlJobNo').val();
+        //console.log("ddlJobNo " + ddlJobNo);
+        var job = ddlJobNo.toString();
+        var ddlSerialNo = $('#ddlMachine').val();
+        if (job === "0") {
+            $("#vikash").text("first Selec any job!!!");
+            $("#myModal").modal();
+           // alert("first Selec any job!!!");
+        }
+        var machineSerialNo = ddlSerialNo.toString();
+        if (ddlSerialNo === "0") {
+            $("#ddlMachineSerialNo").empty();
+            $("#ddlDmeter").empty();
+            $("#ddlMachineMaterial").empty();         
+
+            $('#ddlMachineSerialNo').multiselect('rebuild');
+          
+        }
+        else {
+
+
+            $.ajax({
+                url: 'getMachineSerialNo/Chart',
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                data: { 'machineSerialNo': machineSerialNo, 'jobno': job },
+                success: function (result) {
+                    var array1 = result.split(",");
+                    var markup = "";
+                    for (var x = 0; x < array1.length; x++) {
+                        markup += "<option value=" + array1[x] + ">" + array1[x] + "</option>";
+                    }
+                    //$("#ddlMachineSerialNo").html(markup).show();
+                    $("#ddlMachineSerialNo").empty();
+                    $("#ddlMachineSerialNo").append(markup);
+                    $('#ddlMachineSerialNo').multiselect('rebuild');
+
+                },
+                error: function (reponse) {
+
+                    $("#vikash").text("error : " + reponse);
+                    $("#myModal").modal();
+                  //  alert("error : " + reponse);
+                }
+            });
+        }
+    }
+
+</script>
+
+
+<script>
+    function FillDiameter() {
+        var SN = [];
+
+        $('#SN input:checked').each(function () {
+            SN.push($(this).attr('value'));
+        });
+        var ddlJobNo = $('#ddlJobNo').val();
+        //console.log("ddlJobNo " + ddlJobNo);
+    //    if val=="none"
+    //        $("#myselect:option").attr(selected,false).first().attr(selected,true)
+    //    $("#myselect").multiselct(refresh)
+    //}
+
+      
+
+
+        var job = ddlJobNo.toString();
+        var SrNo = SN.toString();
+        var modelno = $("#ddlMachine").val();
+        var mNo = modelno.toString();
+        var ddlMachineSerialNo = $('#ddlMachineSerialNo').val();
+        //if (ddlMachineSerialNo !== undefined || ddlMachineSerialNo !== null) {
+        //    ddlMachineSerialNo = ddlMachineSerialNo.toString();
+        //    ddlMachineSerialNo = ddlMachineSerialNo.replace('multiselect-all,', '');
+        //}
+       
+        if (ddlMachineSerialNo === undefined || ddlMachineSerialNo === null) {
+
+            
+            $('ddlMachineSerialNo select option:selected').removeAttr('selected');
+            $("#id option:selected").prop("selected", false);
+            $("#id").multiselect('refresh');
+            //$("#ddlMachineSerialNo:option").attr(selected, false).first().attr(selected, false);
+            //$("#ddlMachineSerialNo").multiselct(refresh);
+            //$('#ddlMachineSerialNo').multiselect('rebuild');
+        }
+        else
+        {
+            ddlMachineSerialNo = ddlMachineSerialNo.toString();
+             ddlMachineSerialNo = ddlMachineSerialNo.replace('multiselect-all,', '');
+        }
+       
+        var SerialNo = ddlMachineSerialNo.toString();
+        var stringdiam = $.ajax({
+            url: 'FillDiameter/Chart',
+            contentType: "application/json; charset=utf-8",
+            async: false,
+            data: { 'modelno': modelno, 'srNo': ddlMachineSerialNo, 'machinejobno': job },
+            success: function (result) {
+                
+            },
+            error: function (reponse) {
+                $("#vikash").text("error : " + reponse);
+                $("#myModal").modal();
+                //alert("error : " + reponse);
+            }
+        }).responseText;
+        var resultstring = JSON.parse(stringdiam);
+        var newarray = JSON.parse(resultstring);
+        var array = ",";
+        for (var a = 0; a < newarray.length; a++) {
+            array = array + newarray[a].Column1 + ",";
+        }
+        var edited = array.replace(/^,|,$/g, '');
+        var array1 = edited.split(",");
+        var markup = "<option value='0'>None </option>";
+        for (var x = 0; x < array1.length; x++) {
+            markup += "<option value='" + array1[x] + "'>" + array1[x] + "</option>";
+        }
+
+        $("#ddlDmeter").html(markup).show();
+    }
+
+</script>
+<script>
+    function FillMaterial() {
+        var SN = [];
+        $('#SN input:checked').each(function () {
+            SN.push($(this).attr('value'));
+        });
+        var modelno = $("#ddlMachine").val();
+        var SrNo = SN.toString();
+        var ddlJobNo = $('#ddlJobNo').val();
+        //console.log("ddlJobNo " + ddlJobNo);
+        var job = ddlJobNo.toString();
+        var modelno = $("#ddlMachine").val();
+        var mNo = modelno.toString();
+        if ($("#ddlDmeter").val() === "0") {
+            $("#ddlMachineMaterial").empty();
+        }
+        else {
+
+
+            var stringdiam = $.ajax({
+                url: 'FillMaterial/Chart',
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                data: { 'modelno': modelno, 'srNo': SrNo, 'machinejobno': job },
+                success: function (result) {
+                }
+            }).responseText;
+            var resultstring = stringdiam.toString();
+            var str = eval(resultstring).toString().split(":")
+
+            var strDia = str[1].toString();
+
+            var numberPattern = /\d+/g;
+            var Daimeter = strDia.match(numberPattern)
+            var markup = "<option value='0'>None </option>";
+            markup += "<option value=" + Daimeter + ">" + Daimeter + "</option>";
+            $("#ddlMachineMaterial").html(markup).show();
+        }
+    }
+
+</script>
+
+<script>
+    function GetAvailableDateForJob() {
+       
+       
+
+
+            var stringdiam = $.ajax({
+                url: 'GetAvailableDateForJob/Chart',
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                data: { 'jobNo': "jjsjj", 'modelNo': "ghjghj", 'serialNo': "hjhj", 'diameter': "ghjghjgh", 'material': "gfjghjgh" },
+                success: function (result) {
+                }
+            }).responseText;
+            var resultstring = stringdiam.toString();
+            var str = eval(resultstring).toString().split(":")
+
+            var strDia = str[1].toString();
+
+            var numberPattern = /\d+/g;
+            var Daimeter = strDia.match(numberPattern)
+            var markup = "<option value='0'>None </option>";
+            markup += "<option value=" + Daimeter + ">" + Daimeter + "</option>";
+            $("#ddlMachineMaterial").html(markup).show();
+       
+    }
+
+</script>
