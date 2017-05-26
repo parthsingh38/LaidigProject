@@ -1,0 +1,218 @@
+﻿
+@{
+    ViewBag.Title = "UploadTypes";
+    
+}
+
+
+<h3 style = "margin-top:70px;">Upload Files With Timer....</h3>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Upload Files With Timer....</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.js"></script>
+
+   
+    
+    <script type="text/javascript"
+            src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
+    </script>
+    <script type="text/javascript"
+            src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js">
+    </script>
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
+
+
+
+    <style type="text/css">
+            .sample {
+                background-color: #DC5807;
+                border: 1px solid black;
+                border-collapse: collapse;
+                color: White;
+            }
+
+            .custom-file {
+                position: absolute;
+                top: 37px;
+                left: 0;
+                width: 100%;
+                height: auto;
+                margin: 0;
+                font-size: 23px;
+                cursor: pointer;
+                filter: alpha(opacity=0);
+                opacity: 0;
+                direction: ltr;
+            }
+            /*.demo-content{
+            padding: 15px;
+            font-size: 18px;
+            min-height: 140px;
+            background:#557a6a;
+            margin-bottom: 10px;
+        }*/
+    </style>
+
+    
+    
+
+
+
+
+</head>
+<body style="margin-top:69px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="demo-content">
+                    @using (Html.BeginForm("", "", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <div class="panel panel-warning">
+                            <div class="panel-heading"> </div>
+                            <div class="panel-body">
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <span class="btn btn-default btn-file">
+                                        <span>Choose file</span>
+                                        <input type="file" class="custom-file" name="excelfile" />
+                                    </span>
+                                    <span class="fileinput-filename"></span><span class="fileinput-new"> </span>
+                                </div>
+                                <br />
+                                
+                                    <div id="datetimepicker1" class="input-append">
+                                        <input data-format="hh:mm:ss" type="text">
+                                        <span class="add-on">
+                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                            </i>
+                                        </span>
+                                    </div>
+                               
+                                <input type="submit" class="btnClick btn btn-warning" value="Upload Sample" />
+
+                            </div>
+                        </div>
+
+                    }
+                </div>
+
+            </div>
+           
+
+
+
+            <div class="col-sm-4">
+                <div class="demo-content">
+                    @using (Html.BeginForm("", "DataLogABs", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <div class="panel panel-warning">
+                            <div class="panel-heading"> </div>
+                            <div class="panel-body">
+
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <span class="btn btn-default btn-file">
+                                        <span>Choose file</span>
+                                        <input type="file" class="custom-file" name="excelfile" />
+                                    </span>
+                                    <span class="fileinput-filename"></span><span class="fileinput-new"> </span>
+                                </div>
+                                <br />
+                                
+                                    <div id="datetimepicker2" class="input-append">
+                                        <input data-format="hh:mm:ss" type="text">
+                                        <span class="add-on">
+                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                            </i>
+                                        </span>
+                                    </div>
+                                
+                                <input type="submit" class="btnClick btn btn-warning" value="Upload DataLogAB" />
+                            </div>                         
+                         </div>                       
+
+                    }
+                </div>
+            </div>
+
+
+            <div class="col-sm-4">
+                <div class="demo-content">
+                    @using (Html.BeginForm("", "", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <div class="panel panel-warning">
+                            <div class="panel-heading"> </div>
+                            <div class="panel-body">
+
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <span class="btn btn-default btn-file">
+                                        <span>Choose file</span>
+                                        <input type="file" class="custom-file" name="excelfile" />
+                                    </span>
+                                    <span class="fileinput-filename"></span><span class="fileinput-new"> </span>
+                                </div>
+                                <br />
+                               
+                                    <div id="datetimepicker3" class="input-append">
+                                        <input data-format="hh:mm:ss" type="text">
+                                        <span class="add-on">
+                                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                            </i>
+                                        </span>
+                                    </div>
+                                
+                                <input type="submit" class="btnClick btn btn-warning" value="Upload DataLogMonitouch" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>            
+        </div>
+</div>
+
+
+
+        <!-- Modal -->
+        <div class="modal fade  modal-dialog-main" id="myModal" role="dialog" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog  modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <img src="~/Images/loader.gif" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/modal-->
+        <script type="text/javascript">
+        $(function() {
+                $('.btnClick').click(function() {
+                    $('#myModal').modal('show');
+                    
+            })
+        });
+        $('#datetimepicker1').datetimepicker({
+            pickDate: false
+        });
+        $('#datetimepicker2').datetimepicker({
+            pickDate: false
+        });
+
+        $('#datetimepicker3').datetimepicker({
+            pickDate: false
+        });
+        
+        </script>
+
+   
+
+
+</body>
+</html>

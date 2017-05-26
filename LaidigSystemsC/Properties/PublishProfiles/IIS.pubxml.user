@@ -37,7 +37,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/27/2017 16:25:54</publishTime>
     </File>
     <File Include="bin/LaidigSystemsC.dll">
-      <publishTime>05/22/2017 18:49:21</publishTime>
+      <publishTime>05/25/2017 13:14:50</publishTime>
     </File>
     <File Include="bin/LumenWorks.Framework.IO.dll">
       <publishTime>01/27/2017 16:25:56</publishTime>
@@ -184,7 +184,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>01/27/2017 16:26:10</publishTime>
     </File>
     <File Include="bin/XMLDocument.xml">
-      <publishTime>05/22/2017 18:49:21</publishTime>
+      <publishTime>05/25/2017 13:14:50</publishTime>
     </File>
     <File Include="Content/bootstrap-theme.css">
       <publishTime>02/15/2017 08:33:08</publishTime>
@@ -217,13 +217,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/15/2017 08:33:08</publishTime>
     </File>
     <File Include="Content/Site.css">
-      <publishTime>05/15/2017 14:45:25</publishTime>
+      <publishTime>05/25/2017 13:05:33</publishTime>
     </File>
     <File Include="Content/Style/jquery-ui.css">
       <publishTime>05/18/2017 12:37:25</publishTime>
     </File>
     <File Include="Content/Style/style.css">
-      <publishTime>02/15/2017 08:33:10</publishTime>
+      <publishTime>05/25/2017 12:30:29</publishTime>
     </File>
     <File Include="Content/themes/base/accordion.css">
       <publishTime>02/15/2017 08:33:10</publishTime>
@@ -351,6 +351,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Content/themes/base/tooltip.css">
       <publishTime>02/15/2017 08:33:10</publishTime>
     </File>
+    <File Include="Content/w3.css">
+      <publishTime>05/24/2017 15:59:33</publishTime>
+    </File>
     <File Include="favicon.ico">
       <publishTime>01/27/2017 16:25:28</publishTime>
     </File>
@@ -456,6 +459,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Scripts/jquery-ui-1.12.1.min.js">
       <publishTime>02/15/2017 08:33:10</publishTime>
     </File>
+    <File Include="Scripts/jquery-ui.min.js">
+      <publishTime>05/24/2017 18:41:14</publishTime>
+    </File>
     <File Include="Scripts/jquery.canvasjs.min.js">
       <publishTime>02/15/2017 08:33:10</publishTime>
     </File>
@@ -487,7 +493,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/15/2017 08:33:10</publishTime>
     </File>
     <File Include="Scripts/_references.js">
-      <publishTime>05/16/2017 11:28:36</publishTime>
+      <publishTime>05/24/2017 18:42:23</publishTime>
     </File>
     <File Include="Theme/bluewhale/css/960.css">
       <publishTime>02/15/2017 08:33:10</publishTime>
@@ -517,10 +523,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/15/2017 08:33:10</publishTime>
     </File>
     <File Include="Theme/bluewhale/css/layout.css">
-      <publishTime>02/15/2017 08:33:10</publishTime>
+      <publishTime>05/25/2017 12:50:28</publishTime>
     </File>
     <File Include="Theme/bluewhale/css/nav.css">
-      <publishTime>02/15/2017 08:33:10</publishTime>
+      <publishTime>05/25/2017 12:58:03</publishTime>
     </File>
     <File Include="Theme/bluewhale/css/prettyPhoto.css">
       <publishTime>02/15/2017 08:33:10</publishTime>
@@ -2614,7 +2620,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/15/2017 07:33:13</publishTime>
     </File>
     <File Include="Views/Chart/Index.cshtml">
-      <publishTime>05/22/2017 16:20:55</publishTime>
+      <publishTime>05/25/2017 10:29:49</publishTime>
     </File>
     <File Include="Views/Chart/MultipleYAxis.cshtml">
       <publishTime>02/15/2017 07:33:13</publishTime>
@@ -2713,28 +2719,28 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/15/2017 08:33:14</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>05/22/2017 17:23:03</publishTime>
+      <publishTime>05/25/2017 12:59:59</publishTime>
     </File>
     <File Include="Views/Shared/_Layout2.cshtml">
       <publishTime>05/22/2017 12:06:11</publishTime>
     </File>
     <File Include="Views/Shared/_LoginPartial.cshtml">
-      <publishTime>05/22/2017 15:23:01</publishTime>
+      <publishTime>05/25/2017 12:47:07</publishTime>
     </File>
     <File Include="Views/Shared/_mainLayout.cshtml">
       <publishTime>02/15/2017 08:33:16</publishTime>
     </File>
     <File Include="Views/Siemens/CreateUser.cshtml">
-      <publishTime>05/22/2017 17:20:45</publishTime>
+      <publishTime>05/25/2017 10:29:52</publishTime>
     </File>
     <File Include="Views/Siemens/Delete.cshtml">
-      <publishTime>05/22/2017 15:26:11</publishTime>
+      <publishTime>05/25/2017 13:14:01</publishTime>
     </File>
     <File Include="Views/Siemens/Deleteuser.cshtml">
       <publishTime>05/16/2017 18:42:41</publishTime>
     </File>
     <File Include="Views/Siemens/Index.cshtml">
-      <publishTime>05/22/2017 13:28:38</publishTime>
+      <publishTime>05/25/2017 11:58:55</publishTime>
     </File>
     <File Include="Views/Siemens/View.cshtml">
       <publishTime>05/22/2017 14:11:28</publishTime>
@@ -2758,7 +2764,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/15/2017 08:33:16</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>05/22/2017 18:00:27</publishTime>
+      <publishTime>05/25/2017 13:15:01</publishTime>
     </File>
   </ItemGroup>
 </Project>

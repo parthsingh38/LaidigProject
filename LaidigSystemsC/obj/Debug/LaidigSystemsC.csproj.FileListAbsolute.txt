@@ -86,5 +86,6 @@ E:\laidig\laidigFinalPreparation\20170524\20170523\LaidigSystemsC\LaidigSystemsC
 E:\laidig\laidigFinalPreparation\20170524\20170523\LaidigSystemsC\LaidigSystemsC\bin\System.Web.WebPages.xml
 E:\laidig\laidigFinalPreparation\20170524\20170523\LaidigSystemsC\LaidigSystemsC\bin\System.Web.WebPages.Deployment.xml
 E:\laidig\laidigFinalPreparation\20170524\20170523\LaidigSystemsC\LaidigSystemsC\bin\System.Web.WebPages.Razor.xml
+E:\laidig\laidigFinalPreparation\20170524\20170523\LaidigSystemsC\LaidigSystemsC\obj\Debug\LaidigSystemsC.csprojResolveAssemblyReference.cache
 E:\laidig\laidigFinalPreparation\20170524\20170523\LaidigSystemsC\LaidigSystemsC\obj\Debug\LaidigSystemsC.dll
 E:\laidig\laidigFinalPreparation\20170524\20170523\LaidigSystemsC\LaidigSystemsC\obj\Debug\LaidigSystemsC.pdb
